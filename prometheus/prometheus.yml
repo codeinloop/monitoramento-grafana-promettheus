@@ -1,0 +1,27 @@
+scrape_configs:
+  - job_name: "impressora3d"
+    scrape_interval: 5s
+    metrics_path: /probe
+    static_configs:
+      - targets: ['192.168.31.81:7125']
+    params:
+      modules: [
+        'process_stats',
+        'network_stats',
+        'system_info',
+        'job_queue',
+        'directory_info',
+        'printer_objects',
+        'history',
+      ]
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement:  172.28.97.231:9101
+  - job_name: 'cloudin_node'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['192.168.31.26:9100']
